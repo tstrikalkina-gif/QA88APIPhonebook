@@ -30,10 +30,10 @@ def random_user():
     username = f"qa_{int(time.time())}_{fake.email()}"
     password = fake.password(
         length=random.randint(8, 15),
-        special_chars=True,
+        special_chars=False,
         digits=True,
         upper_case=True,
         lower_case=True,
-    )
+    )+"$"
     return User(username=username, password=password)
 
