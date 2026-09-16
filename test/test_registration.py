@@ -1,6 +1,9 @@
-from urllib import response
+import pytest
 
 from conftest import *
+from faker import Faker
+
+fake = Faker()
 
 
 class TestRegistration:
@@ -48,13 +51,42 @@ class TestRegistration:
         body = {
             "username": user.username,
             "password": user.password,
-
         }
         headers = {
             "Content-Type": "application/json"
         }
-        session.post(registration_url, json=body, headers=headers)
         response = session.post(registration_url, json=body, headers=headers)
+        #print(response.json())
+        #assert response.status_code == 400
+       #assert "must be a well-formed email address" in response.json().values()
+        data = response.json()
         print(response.json())
         assert response.status_code == 400
-       #assert "must be a well-formed email address" in response.json().values()
+        assert data["message"]["username"] == "must be a well-formed email address"
+
+
+    @pytest.mark.parametrize("invalid_password", [
+        "qwerty123$",
+        "QWERTY123!",
+        "Qwerty!$",
+        "Qwerty123",
+        "Qwer ty1$",
+        "Ыerty!123",
+    ])
+    def test_registration_negative_invalid_email(self, session, registration_url, invalid_password):
+     user = User(fake.email(), invalid_password)
+     body = {
+         "username": user.username,
+         "password": user.password,
+     }
+     headers = {
+         "Content-Type": "application/json",
+     }
+     response = session.post(registration_url, json=body, headers=headers)
+     data = response.json()
+     print(response.json())
+     assert response.status_code == 400
+     assert "Must contain at" in data["message"]["password"]
+
+
+
