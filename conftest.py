@@ -1,3 +1,5 @@
+
+
 import pytest
 import requests
 import random
@@ -6,6 +8,7 @@ import time
 
 from config import *
 from faker import Faker
+import re
 
 from models.contact_dto import Contact
 from models.user_dto import User
@@ -98,7 +101,25 @@ def create_contact(session,add_contact_url,auth_header,random_contact):
                             json=asdict(random_contact),
                             headers=auth_header)
 
+    message = response.json()["message"]
+    match = re.search(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+                     message)
+    assert match,f"Id not found --> {message}"
+    contact_id = match.group()
+    return contact_id
+
+
+@pytest.fixture(scope="function")
+def create_contact_return_contact(session,add_contact_url,
+ auth_header,random_contact):
+    response = session.post(add_contact_url,
+                            json=asdict(random_contact),
+                            headers=auth_header)
+
 
     contact_id = response.json()["message"][23:]
+    contact = asdict(random_contact)
+    contact["id"] = contact_id
+    return contact
 
-    return contact_id
+

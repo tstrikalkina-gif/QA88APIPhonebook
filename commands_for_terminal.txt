@@ -10,5 +10,7 @@ pytest test_pytest.py # пример запуска отд. теста
 
 
 pytest --version
+pytest -m smoke
 
 pytest # запуск тестов pytest -v # подр. описание про тест pytest -s # выведет принт с тестом pytest --version # показ версию
+
