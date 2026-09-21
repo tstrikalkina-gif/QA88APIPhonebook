@@ -1,4 +1,4 @@
-faker==26.2.1
+faker==20.1.0
 pytest==9.1.1
 pytest-html==4.2.0
 pytest-metadata==3.1.1
