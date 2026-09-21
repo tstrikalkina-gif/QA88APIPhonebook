@@ -1,6 +1,7 @@
 pip install pytest
 pip install --upgrade pip
 pip install -r requiremends.txt
+pip freeze > requirements.txt
 
 pytest
 pytest -v
@@ -14,3 +15,7 @@ pytest -m smoke
 
 pytest # запуск тестов pytest -v # подр. описание про тест pytest -s # выведет принт с тестом pytest --version # показ версию
 
+pytest -m smoke   запуск одной группы тестов
+pytest -m "smoke and auth"   запуск и smoke, и auth
+pytest -m "smoke or negative" или-или
+pytest -m "auth and not smoke"  auth  но без smoke

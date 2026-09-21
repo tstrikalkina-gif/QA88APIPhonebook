@@ -3,6 +3,7 @@ from config import *
 
 class TestLogin:
     @pytest.mark.smoke
+    @pytest.mark.auth
     def test_login_positive(self, session, login_url, registered_user):
         body = {
             "username": registered_user.username,
@@ -17,6 +18,8 @@ class TestLogin:
                 "",
                 "fjhgrjti@rty.ckf"
         ])
+    @pytest.mark.auth
+    @pytest.mark.negative
     def test_login_negative_wrong_email(self, session, login_url, invalid_username):
         body = {
              "username": invalid_username,
@@ -32,6 +35,8 @@ class TestLogin:
               "",
               "Qwerty1345!"
             ])
+    @pytest.mark.auth
+    @pytest.mark.negative
     def test_login_negative_wrong_password(self, session, login_url, invalid_password):
             body = {
                  "username": TEST_EMAIL,

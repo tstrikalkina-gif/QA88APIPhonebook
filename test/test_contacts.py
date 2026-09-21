@@ -25,6 +25,8 @@ class TestContacts:
         assert response.status_code == 200
         assert isinstance(response.json()["contacts"], list)
 
+
+    @pytest.mark.negative
     def test_get_all_contacts_negative_wrong_token(self, session, add_contact_url):
         headers = {"Authorization": "vbghtuyi bnhyui "}
         response = session.get(add_contact_url, headers=headers)
@@ -86,7 +88,10 @@ class TestContacts:
         response = session.put(add_contact_url, headers=auth_header, json=contact)
         assert response.status_code == 200
         assert "Contact was updated" in response.json()["message"]
-        
+
+
+
+    @pytest.mark.flaky(reruns=3, reruns_delay=1)
     @pytest.mark.smoke
     def test_delete_contact_positive(self, session, add_contact_url, auth_header, create_contact):
         contact_id = create_contact

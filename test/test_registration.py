@@ -8,6 +8,7 @@ fake = Faker()
 
 class TestRegistration:
     @pytest.mark.smoke
+    @pytest.mark.auth
     def test_registration_positive(self, session, registration_url, random_user):
         print(random_user)
         body = {
@@ -22,7 +23,8 @@ class TestRegistration:
         assert response.status_code == 200
         assert "token" in response.json().keys()
 
-
+    @pytest.mark.auth
+    @pytest.mark.negative
     def test_registration_negative_duplicate_user(self, session, registration_url, random_user):
         body = {
             "username": random_user.username,
@@ -38,6 +40,8 @@ class TestRegistration:
         assert response.status_code in  [400,409]
         assert "User already exists" in response.json().values()
 
+    @pytest.mark.auth
+    @pytest.mark.negative
     @pytest.mark.parametrize("invalid_emai", [
         "rdgdfhg123.ytr.uhg",
         "gfhghku45@",
@@ -46,6 +50,8 @@ class TestRegistration:
         "jhgftdrc@@jhgl.fgt"
         "ughjhbgh @kjy.ki"
     ])
+    @pytest.mark.auth
+    @pytest.mark.negative
     def test_registration_negative_invalid_email(self, session, registration_url, invalid_emai):
         user = User(invalid_emai, "Qretgd123$")
         body = {
@@ -73,6 +79,8 @@ class TestRegistration:
         "Qwer ty1$",
         "Ыerty!123",
     ])
+    @pytest.mark.auth
+    @pytest.mark.negative
     def test_registration_negative_invalid_email(self, session, registration_url, invalid_password):
      user = User(fake.email(), invalid_password)
      body = {
