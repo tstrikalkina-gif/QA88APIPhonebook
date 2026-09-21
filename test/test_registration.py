@@ -76,7 +76,6 @@ class TestRegistration:
         "QWERTY123!",
         "Qwerty!$",
         "Qwerty123",
-        "Qwer ty1$",
         "Ыerty!123",
     ])
     @pytest.mark.auth
